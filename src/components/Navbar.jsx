@@ -1,7 +1,8 @@
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
 import logo from "../../images/logo.png";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { TransactionContext } from "../context/TransactionContext";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer hover:text-gray-300 ${classprops}`}>
@@ -11,6 +12,7 @@ const NavBarItem = ({ title, classprops }) => (
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { currentAccount, connectWallet } = useContext(TransactionContext);
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
@@ -21,9 +23,13 @@ const Navbar = () => {
         {["Market", "Exchange", "Tutorials", "Wallets"].map((item, index) => (
           <NavBarItem key={item + index} title={item} />
         ))}
-        <li className="bg-[#2951e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-          Connect Wallet
-        </li>
+        {!currentAccount ? (
+          <li onClick={connectWallet} className="bg-[#2951e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+            Connect Wallet
+          </li>
+        ) : (
+          <div className="hover:text-[#2951e3] text-[#6876aa] cursor-pointer text-lg font-bold">Welcome back</div>
+        )}
       </ul>
       <div className="flex relative ">
         {isOpen ? (
